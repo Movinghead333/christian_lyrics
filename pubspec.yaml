@@ -1,6 +1,6 @@
 name: christian_lyrics
 description: Flutter plugin for lyrics srt type of song.
-version: 0.0.4
+version: 0.0.5
 homepage: https://github.com/diepnghitinh/christian_lyrics
 
 environment:
