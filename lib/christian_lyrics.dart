@@ -1,15 +1,13 @@
-
 import 'dart:async';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
 
 import 'lyric.dart';
 
 class ChristianLyrics {
-
-  StreamController<int> positionWithOffsetController = StreamController<int>.broadcast();
+  StreamController<int> positionWithOffsetController =
+      StreamController<int>.broadcast();
   int lastPositionUpdateTime = 0;
   int positionWithOffset = 0;
   int lastPositionWithOffset = 0;
@@ -28,24 +26,29 @@ class ChristianLyrics {
 
   void setLyricContent(String lyricContent) {
     positionWithOffset = 0;
-    this.playingLyric!.setLyric(lyric: lyricContent);
+    playingLyric!.setLyric(lyric: lyricContent);
   }
 
-  void setPositionWithOffset({int position=0, int duration=1}) {
+  void setPositionWithOffset({int position = 0, int duration = 1}) {
     positionWithOffset = position;
     positionWithOffsetController.add(positionWithOffset);
   }
 
-  Widget getLyric(BuildContext context, {bool isPlaying = false}) {
+  Widget getLyric(BuildContext context,
+      {bool isPlaying = false, Color textColor = Colors.white}) {
+    TextStyle style = Theme.of(context)
+        .textTheme
+        .bodyMedium!
+        .copyWith(height: 1.5, fontSize: 20, color: textColor);
 
-    TextStyle style = Theme.of(context).textTheme.bodyText1!.copyWith(height: 1.5, fontSize: 20, color: Colors.white);
-
-    if (this.playingLyric!.hasLyric) {
+    if (playingLyric!.hasLyric) {
       return LayoutBuilder(builder: (context, constraints) {
-        final normalStyle = style.copyWith(color: style.color!.withOpacity(0.7));
+        final normalStyle =
+            style.copyWith(color: style.color!.withOpacity(0.7));
         return ShaderMask(
           shaderCallback: (rect) {
-            return ui.Gradient.linear(Offset(rect.width / 2, 0), Offset(rect.width / 2, constraints.maxHeight), [
+            return ui.Gradient.linear(Offset(rect.width / 2, 0),
+                Offset(rect.width / 2, constraints.maxHeight), [
               const Color(0x00FFFFFF),
               style.color!,
               style.color!,
@@ -58,7 +61,7 @@ class ChristianLyrics {
             ]);
           },
           child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: StreamBuilder(
                   stream: positionWithOffsetController.stream,
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -71,24 +74,21 @@ class ChristianLyrics {
                       lyricLineStyle: normalStyle,
                       highlight: style.color!,
                       position: result,
-                      onTap: () {
-                      },
-                      size: Size(constraints.maxWidth, constraints.maxHeight == double.infinity ? 0 : constraints.maxHeight),
+                      onTap: () {},
+                      size: Size(
+                          constraints.maxWidth,
+                          constraints.maxHeight == double.infinity
+                              ? 0
+                              : constraints.maxHeight),
                       playing: isPlaying,
                     );
-                  }
-              )
-          ),
+                  })),
         );
       });
     } else {
-      return Container(
-        child: Center(
-          child: Text(playingLyric!.message, style: style),
-        ),
+      return Center(
+        child: Text(playingLyric!.message, style: style),
       );
     }
-
   }
-
 }

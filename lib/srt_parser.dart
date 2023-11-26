@@ -133,7 +133,7 @@ void parseCoordinates(Subtitle subtitle, String chunk1) {
 
   final Iterable<Match> result = detectCoordination.allMatches(chunk1);
 
-  if (result.length != 0) {
+  if (result.isNotEmpty) {
     List listOfXs =
         result.where((Match match) => match.group(2) == 'X').toList();
 
@@ -141,7 +141,8 @@ void parseCoordinates(Subtitle subtitle, String chunk1) {
     for (Match item in listOfXs) {
       int number = int.parse(item.group(3)!);
       Match matchingY = result.firstWhere((Match matchY) {
-        return (matchY.group(2) == 'Y' && int.parse(matchY.group(3)!) == number);
+        return (matchY.group(2) == 'Y' &&
+            int.parse(matchY.group(3)!) == number);
       });
 
       Line parsedLine = Line(subtitle.rawLines[listOfXs.indexOf(item)]);
@@ -164,9 +165,7 @@ Range? parseBeginEnd(String line) {
       r'(\d\d):(\d\d):(\d\d),(\d\d\d) --> (\d\d):(\d\d):(\d\d),(\d\d\d)');
   final Match match = pattern.firstMatch(line)!;
 
-  if (match == null) {
-    return null;
-  } else if (int.parse(match.group(1)!) > 23 ||
+  if (int.parse(match.group(1)!) > 23 ||
       int.parse(match.group(2)!) > 59 ||
       int.parse(match.group(3)!) > 59 ||
       int.parse(match.group(4)!) > 999 ||
@@ -215,7 +214,7 @@ int timeStampToMillis(int hour, int minute, int sec, int ms) {
 
 @visibleForTesting
 List<String> splitIntoLines(String data) {
-  return LineSplitter().convert(data);
+  return const LineSplitter().convert(data);
 }
 
 //splits
