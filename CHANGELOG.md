@@ -1,3 +1,8 @@
+## 0.2.0
+
+* Added the possibility to pass a color for the displayed text which is set to default value if not used
+* Updated default text color
+
 ## 0.1.0
 
 * Updated the package to work with current flutter and dart requirements

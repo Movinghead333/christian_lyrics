@@ -34,12 +34,16 @@ class ChristianLyrics {
     positionWithOffsetController.add(positionWithOffset);
   }
 
-  Widget getLyric(BuildContext context,
-      {bool isPlaying = false, Color textColor = Colors.white}) {
+  Widget getLyric(
+    BuildContext context, {
+    bool isPlaying = false,
+    Color textColor = const Color.fromARGB(255, 23, 22, 50),
+    double fontSize = 24,
+  }) {
     TextStyle style = Theme.of(context)
         .textTheme
         .bodyMedium!
-        .copyWith(height: 1.5, fontSize: 20, color: textColor);
+        .copyWith(height: 1.5, fontSize: fontSize, color: textColor);
 
     if (playingLyric!.hasLyric) {
       return LayoutBuilder(builder: (context, constraints) {
