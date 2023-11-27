@@ -37,25 +37,25 @@ class ChristianLyrics {
   Widget getLyric(
     BuildContext context, {
     bool isPlaying = false,
-    Color textColor = const Color.fromARGB(255, 23, 22, 50),
+    Color textDefaultColor = const Color.fromARGB(255, 134, 134, 134),
+    Color textHighlightColor = const Color.fromARGB(255, 255, 222, 59),
     double fontSize = 24,
   }) {
     TextStyle style = Theme.of(context)
         .textTheme
         .bodyMedium!
-        .copyWith(height: 1.5, fontSize: fontSize, color: textColor);
+        .copyWith(height: 1.5, fontSize: fontSize, color: textHighlightColor);
 
     if (playingLyric!.hasLyric) {
       return LayoutBuilder(builder: (context, constraints) {
-        final normalStyle =
-            style.copyWith(color: style.color!.withOpacity(0.7));
+        final normalStyle = style.copyWith(color: textDefaultColor);
         return ShaderMask(
           shaderCallback: (rect) {
             return ui.Gradient.linear(Offset(rect.width / 2, 0),
                 Offset(rect.width / 2, constraints.maxHeight), [
               const Color(0x00FFFFFF),
-              style.color!,
-              style.color!,
+              const Color(0xFFFFFFFF),
+              const Color(0xFFFFFFFF),
               const Color(0x00FFFFFF),
             ], [
               0.0,

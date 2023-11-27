@@ -1,3 +1,8 @@
+## 0.3.0
+
+* Now both a default and a highlight text color can be passed into the lyrics widget.
+* Fixed a bug in the used shader mask which would lead to custom non highlight text colors to not be displayed correctly.
+
 ## 0.2.0
 
 * Added the possibility to pass a color for the displayed text which is set to default value if not used
