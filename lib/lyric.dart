@@ -10,6 +10,7 @@ class Lyric extends StatefulWidget {
     required this.lyric,
     required this.size,
     required this.playing,
+    required this.animateLyricLines,
     this.lyricLineStyle,
     this.position,
     this.textAlign = TextAlign.center,
@@ -33,6 +34,8 @@ class Lyric extends StatefulWidget {
   final VoidCallback? onTap;
 
   final bool playing;
+
+  final bool animateLyricLines;
 
   @override
   State<StatefulWidget> createState() => LyricState();
@@ -130,21 +133,26 @@ class LyricState extends State<Lyric> with TickerProviderStateMixin {
         lyricPainter!.offsetScroll += offset;
       }
 
-      _gradientController?.dispose();
-      final entry = widget.lyric[line];
-      final startPercent = (milliseconds - entry.position) / entry.duration;
-      _gradientController = AnimationController(
-        vsync: this,
-        duration:
-            Duration(milliseconds: (entry.duration - entry.position).toInt()),
-      );
-      _gradientController!.addListener(() {
-        lyricPainter!.lineGradientPercent = _gradientController!.value;
-      });
-      if (widget.playing) {
-        _gradientController!.forward(from: startPercent);
+      if (widget.animateLyricLines) {
+        _gradientController?.dispose();
+        final entry = widget.lyric[line];
+        final startPercent = (milliseconds - entry.position) / entry.duration;
+        _gradientController = AnimationController(
+          vsync: this,
+          duration:
+              Duration(milliseconds: (entry.duration - entry.position).toInt()),
+        );
+        _gradientController!.addListener(() {
+          lyricPainter!.lineGradientPercent = _gradientController!.value;
+        });
+        if (widget.playing) {
+          _gradientController!.forward(from: startPercent);
+        } else {
+          _gradientController!.value = startPercent;
+        }
       } else {
-        _gradientController!.value = startPercent;
+        // -1 is defaulted to 100% via the setter
+        lyricPainter!.lineGradientPercent = -1;
       }
     }
     lyricPainter!.currentLine = line;
@@ -337,7 +345,13 @@ class LyricPainter extends ChangeNotifier implements CustomPainter {
     _highlightPainter.layout(); //layout with unbound width
 
     double lineWidth = _highlightPainter.width;
-    double gradientWidth = _highlightPainter.width * lineGradientPercent;
+    // The factor 1.1 is reuqired for the no-line-animation mode to work
+    // otherwise we get lines that are not fully highlighted
+    // TODO: Find a more elegant solution to this. That problaby involves
+    //       rewriting the line animator and splitting it in individual
+    //       animations one for each line since the lines have different widths
+    //       and require different xoffsets to achieve the desired animation.
+    double gradientWidth = _highlightPainter.width * lineGradientPercent * 1.1;
     final double lineHeight = _highlightPainter.height;
 
     _highlightPainter.layout(maxWidth: size.width);

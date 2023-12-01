@@ -1,3 +1,7 @@
+## 0.4.0
+
+* Added a flag to configure whether a line is animated by a linear gradient or just displayed completely immediately
+
 ## 0.3.0
 
 * Now both a default and a highlight text color can be passed into the lyrics widget.

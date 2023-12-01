@@ -40,6 +40,7 @@ class ChristianLyrics {
     Color textDefaultColor = const Color.fromARGB(255, 134, 134, 134),
     Color textHighlightColor = const Color.fromARGB(255, 255, 222, 59),
     double fontSize = 24,
+    bool animateLyricLines = true,
   }) {
     TextStyle style = Theme.of(context)
         .textTheme
@@ -65,28 +66,30 @@ class ChristianLyrics {
             ]);
           },
           child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: StreamBuilder(
-                  stream: positionWithOffsetController.stream,
-                  builder: (BuildContext context, AsyncSnapshot snapshot) {
-                    final result = snapshot.data ?? 0;
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: StreamBuilder(
+                stream: positionWithOffsetController.stream,
+                builder: (BuildContext context, AsyncSnapshot snapshot) {
+                  final result = snapshot.data ?? 0;
 
-                    //print('position: ${result} - ${positionWithOffset} - isPlaying: ${isPlaying}');
+                  //print('position: ${result} - ${positionWithOffset} - isPlaying: ${isPlaying}');
 
-                    return Lyric(
-                      lyric: playingLyric!.lyric!,
-                      lyricLineStyle: normalStyle,
-                      highlight: style.color!,
-                      position: result,
-                      onTap: () {},
-                      size: Size(
-                          constraints.maxWidth,
-                          constraints.maxHeight == double.infinity
-                              ? 0
-                              : constraints.maxHeight),
-                      playing: isPlaying,
-                    );
-                  })),
+                  return Lyric(
+                    lyric: playingLyric!.lyric!,
+                    lyricLineStyle: normalStyle,
+                    highlight: style.color!,
+                    position: result,
+                    onTap: () {},
+                    size: Size(
+                        constraints.maxWidth,
+                        constraints.maxHeight == double.infinity
+                            ? 0
+                            : constraints.maxHeight),
+                    playing: isPlaying,
+                    animateLyricLines: animateLyricLines,
+                  );
+                }),
+          ),
         );
       });
     } else {
